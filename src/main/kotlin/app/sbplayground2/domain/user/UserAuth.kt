@@ -9,11 +9,11 @@ class UserAuth(
     @Id
     val id: Long,
 
-    val source: IdSource,
-
     val type: IdType,
 
     val value: String,
+
+    val source: IdSource,
 
     val data: Object,
 )
