@@ -1,6 +1,5 @@
 package app.sbplayground2.domain.user
 
-import org.springframework.context.annotation.Configuration
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.repository.CrudRepository
@@ -16,7 +15,9 @@ class UserAuth(
 
     val source: IdSource,
 
-    val data: Object? = null,
+    val data: Map<String, Any>? = null
 )
 
-interface UserAuthRepository : CrudRepository<UserAuth, Long>
+interface UserAuthRepository : CrudRepository<UserAuth, Long> {
+    fun findUserAuthsByTypeAndValueAndSource(type: IdType, value: String, source: IdSource): List<UserAuth>
+}
