@@ -1,38 +1,39 @@
 package app.sbplayground2.domain.user
 
 import app.sbplayground2.IntegrationTest
-import org.junit.jupiter.api.Assertions.*
+import app.sbplayground2.domain.user.IdSource.GOOGLE
+import app.sbplayground2.domain.user.IdType.EMAIL
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import kotlin.test.Test
+import kotlin.test.assertEquals
 
-@SpringBootTest
-class UserAuthTest @Autowired constructor(
-    private val userAuthRepository: UserAuthRepository
-) : IntegrationTest() {
+class UserAuthTest : IntegrationTest() {
+    @Autowired
+    private lateinit var userAuthRepository: UserAuthRepository
+
     @Test
-    fun `crud works`() {
-        var list = userAuthRepository.findAll().toList()
-        assertTrue(list.isEmpty())
-        userAuthRepository.save(UserAuth(type = IdType.EMAIL, value = "hahahah@hihi.com", source = IdSource.GOOGLE))
-        userAuthRepository.save(UserAuth(type = IdType.PHONE, value = "+621234567890", source = IdSource.WA))
+    fun `create read`() {
+        val ua1 = UserAuth(null, EMAIL, "user@domain", GOOGLE)
+        val findById = userAuthRepository.findById(userAuthRepository.save(ua1).id!!).get()
 
-        list = userAuthRepository.findAll().toList()
-        assertEquals(2, list.size)
-        userAuthRepository.deleteAll()
+        assertEquals(EMAIL, findById.type)
+        assertEquals("user@domain", findById.value)
+        assertEquals(GOOGLE, findById.source)
+
+        userAuthRepository.delete(findById)
+
     }
 
     @Test
-    fun `unique key work`() {
-        userAuthRepository.save(
-            UserAuth(
-                type = IdType.EMAIL, value = "hahahah@hihi.com", source = IdSource.GOOGLE, data = mapOf("k1" to "v1")
-            )
-        )
-        userAuthRepository.save(
-            UserAuth(
-                type = IdType.EMAIL, value = "hahahah@hihi.com", source = IdSource.GOOGLE, data = mapOf("k2" to "v2")
-            )
-        )
+    fun `unique key enforce`() {
+        val ua1 = UserAuth(null, EMAIL, "user@domain", GOOGLE, mapOf("key" to "value"))
+        val ua2 = UserAuth(null, EMAIL, "user@domain", GOOGLE, mapOf("key" to "another value"))
+
+        userAuthRepository.save(ua1)
+        try {
+            userAuthRepository.save(ua2)
+        } catch (e: Exception) {}
+
+        assertEquals(1, userAuthRepository.findAll().count())
     }
 }

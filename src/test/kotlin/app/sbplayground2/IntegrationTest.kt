@@ -12,19 +12,21 @@ import org.testcontainers.junit.jupiter.Testcontainers
 abstract class IntegrationTest {
 
     companion object {
-        @Container
-        private val postgres = PostgreSQLContainer<Nothing>("postgres:17.5-alpine").apply {
-            withDatabaseName("testdb")
-            withUsername("postgres")
-            withPassword("password")
+        private val postgres: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:15")
+            .withDatabaseName("testdb")
+            .withUsername("test")
+            .withPassword("test")
+
+        init {
+            postgres.start()
         }
 
-        @JvmStatic
         @DynamicPropertySource
-        fun registerPgProperties(registry: DynamicPropertyRegistry) {
-            registry.add("spring.datasource.url") { postgres.jdbcUrl }
-            registry.add("spring.datasource.username") { postgres.username }
-            registry.add("spring.datasource.password") { postgres.password }
+        @JvmStatic
+        fun configureProperties(registry: DynamicPropertyRegistry) {
+            registry.add("spring.datasource.url", postgres::getJdbcUrl)
+            registry.add("spring.datasource.username", postgres::getUsername)
+            registry.add("spring.datasource.password", postgres::getPassword)
         }
     }
 }
