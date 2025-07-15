@@ -4,6 +4,7 @@ import app.sbplayground2.IntegrationTest
 import app.sbplayground2.domain.user.IdSource.GOOGLE
 import app.sbplayground2.domain.user.IdType.EMAIL
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
@@ -12,27 +13,28 @@ class UserAuthTest : IntegrationTest() {
     private lateinit var userAuthRepository: UserAuthRepository
 
     @Test
-    fun `create read`() {
-        val ua1 = UserAuth(null, EMAIL, "user@domain", GOOGLE)
-        val findById = userAuthRepository.findById(userAuthRepository.save(ua1).id!!).get()
+    fun `insert read`() {
+        val insertData = userAuthRepository.insert(EMAIL, "om@om.com", GOOGLE, mapOf())
+        val findById = userAuthRepository.findById(insertData.id!!).get()
 
         assertEquals(EMAIL, findById.type)
-        assertEquals("user@domain", findById.value)
+        assertEquals("om@om.com", findById.value)
         assertEquals(GOOGLE, findById.source)
 
-        userAuthRepository.delete(findById)
+        assertNotNull(findById.createdAt)
+        assertNotNull(findById.modifiedAt)
 
+        userAuthRepository.delete(findById)
     }
 
     @Test
     fun `unique key enforce`() {
-        val ua1 = UserAuth(null, EMAIL, "user@domain", GOOGLE, mapOf("key" to "value"))
-        val ua2 = UserAuth(null, EMAIL, "user@domain", GOOGLE, mapOf("key" to "another value"))
-
-        userAuthRepository.save(ua1)
+        userAuthRepository.insert(EMAIL, "user@domain", GOOGLE, mapOf("key" to "value"))
         try {
-            userAuthRepository.save(ua2)
-        } catch (e: Exception) {}
+            userAuthRepository.insert(EMAIL, "user@domain", GOOGLE, mapOf("key" to "another value"))
+        } catch (e: Exception) {
+            print("Exception while trying to add user: $e")
+        }
 
         assertEquals(1, userAuthRepository.findAll().count())
     }

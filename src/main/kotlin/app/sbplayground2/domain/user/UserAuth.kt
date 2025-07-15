@@ -16,7 +16,11 @@ class UserAuth(
 
     val source: IdSource,
 
-    val data: Map<String, Any>? = null
+    val data: Map<String, Any>? = null,
+
+    val createdAt: java.time.OffsetDateTime? = null,
+
+    val modifiedAt: java.time.OffsetDateTime? = null,
 )
 
 interface UserAuthRepository : CrudRepository<UserAuth, Long> {
@@ -28,4 +32,11 @@ interface UserAuthRepository : CrudRepository<UserAuth, Long> {
     """
     )
     fun findByUniqueKey(type: IdType, value: String, source: IdSource): UserAuth
+
+    @Query("""
+        INSERT INTO user_auth (type, value, source, data)
+        VALUES (:type, :value, :source, :data)
+        RETURNING *
+    """)
+    fun insert(type: IdType, value: String, source: IdSource, data: Map<String, Any>): UserAuth
 }
