@@ -29,8 +29,8 @@ class UserAuthTest : IntegrationTest() {
         assertEquals(GOOGLE, findById.source)
         assertNotNull(findById.createdAt)
         assertNotNull(findById.updated_at)
-
-        userAuthRepository.updateData(findById.type, findById.value, GOOGLE, mapOf("key" to "new value"))
+        Thread.sleep(1)
+        userAuthRepository.updateData(findById.type, findById.value, findById.source, mapOf("key" to "new value"))
 
         val afterUpdate = userAuthRepository.findDataById(id)
         assertEquals("new value", afterUpdate?.data?.get("key"))
