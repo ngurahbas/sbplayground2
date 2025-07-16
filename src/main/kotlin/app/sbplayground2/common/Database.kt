@@ -13,4 +13,6 @@ interface ReadRepository<T , ID> : Repository<T, ID> {
 @NoRepositoryBean
 interface WriteRepository<T , ID> : Repository<T, ID> {
     fun deleteById(id: ID)
+
+    fun deleteAll()
 }

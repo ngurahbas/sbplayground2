@@ -3,6 +3,7 @@ package app.sbplayground2.domain.user
 import app.sbplayground2.common.ReadRepository
 import app.sbplayground2.common.WriteRepository
 import org.springframework.data.annotation.Id
+import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.relational.core.mapping.Table
 
@@ -21,7 +22,7 @@ class UserAuth(
 
     val createdAt: java.time.OffsetDateTime? = null,
 
-    val modifiedAt: java.time.OffsetDateTime? = null,
+    val updated_at: java.time.OffsetDateTime? = null,
 )
 
 interface UserAuthRepository : ReadRepository<UserAuth, Long>, WriteRepository<UserAuth, Long> {
@@ -42,4 +43,14 @@ interface UserAuthRepository : ReadRepository<UserAuth, Long>, WriteRepository<U
     """
     )
     fun insert(type: IdType, value: String, source: IdSource, data: Map<String, Any>): UserAuth
+
+    @Modifying
+    @Query(
+        """
+        UPDATE user_auth
+        SET data = :data
+        WHERE type = :type::id_type AND value = :value AND source = :source::id_source
+    """
+    )
+    fun updateData(type: IdType, value: String, source: IdSource, data: Map<String, String>)
 }

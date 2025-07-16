@@ -14,22 +14,29 @@ class UserAuthTest : IntegrationTest() {
     private lateinit var userAuthRepository: UserAuthRepository
 
     @Test
-    fun `insert read delete`() {
+    fun `insert read update delete`() {
         val insertData = userAuthRepository.insert(EMAIL, "om@om.com", GOOGLE, mapOf())
-        val findById = userAuthRepository.findDataById(insertData.id!!)
+        val id = insertData.id!!
+        val findById = userAuthRepository.findDataById(id)
 
-        if (findById != null) {
-            assertEquals(EMAIL, findById.type)
-            assertEquals("om@om.com", findById.value)
-            assertEquals(GOOGLE, findById.source)
-
-            assertNotNull(findById.createdAt)
-            assertNotNull(findById.modifiedAt)
-
-            userAuthRepository.deleteById(findById.id!!)
+        if (findById == null) {
+            assert(false) { "Should not reach this part. Insertion was failed" }
+            return
         }
 
-        val noExistsById = userAuthRepository.findDataById(insertData.id!!)
+        assertEquals(EMAIL, findById.type)
+        assertEquals("om@om.com", findById.value)
+        assertEquals(GOOGLE, findById.source)
+        assertNotNull(findById.createdAt)
+        assertNotNull(findById.updated_at)
+
+        userAuthRepository.updateData(findById.type, findById.value, GOOGLE, mapOf("key" to "new value"))
+
+        val afterUpdate = userAuthRepository.findDataById(id)
+        assertEquals("new value", afterUpdate?.data?.get("key"))
+
+        userAuthRepository.deleteById(id)
+        val noExistsById = userAuthRepository.findDataById(id)
 
         assertNull(noExistsById)
     }
@@ -48,5 +55,7 @@ class UserAuthTest : IntegrationTest() {
         assertEquals("value", findByUniqueKey.data?.get("key"))
 
         assertEquals(1, userAuthRepository.count())
+
+        userAuthRepository.deleteAll()
     }
 }

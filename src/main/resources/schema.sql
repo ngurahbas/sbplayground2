@@ -13,6 +13,6 @@ CREATE TABLE  user_auth
     source      id_source   NOT NULL,
     data        JSONB,
     created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     CONSTRAINT user_auth_type_value_source_key UNIQUE (type, value, source)
 );
