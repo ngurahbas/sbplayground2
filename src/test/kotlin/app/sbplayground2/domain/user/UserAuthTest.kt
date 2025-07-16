@@ -32,8 +32,9 @@ class UserAuthTest : IntegrationTest() {
         Thread.sleep(1)
         userAuthRepository.updateData(findById.type, findById.value, findById.source, mapOf("key" to "new value"))
 
-        val afterUpdate = userAuthRepository.findDataById(id)
-        assertEquals("new value", afterUpdate?.data?.get("key"))
+        val afterUpdate = userAuthRepository.findDataById(id)!!
+        assertEquals("new value", afterUpdate.data?.get("key"))
+        assertNotNull(afterUpdate.updated_at.isAfter(afterUpdate.createdAt))
 
         userAuthRepository.deleteById(id)
         val noExistsById = userAuthRepository.findDataById(id)

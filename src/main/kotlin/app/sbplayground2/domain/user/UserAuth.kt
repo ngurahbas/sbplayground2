@@ -20,9 +20,9 @@ class UserAuth(
 
     val data: Map<String, Any>? = null,
 
-    val createdAt: java.time.OffsetDateTime? = null,
+    val createdAt: java.time.OffsetDateTime,
 
-    val updated_at: java.time.OffsetDateTime? = null,
+    val updated_at: java.time.OffsetDateTime,
 )
 
 interface UserAuthRepository : ReadRepository<UserAuth, Long>, WriteRepository<UserAuth, Long> {
