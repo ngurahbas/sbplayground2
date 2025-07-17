@@ -43,3 +43,11 @@ kotlin {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.register<Exec>("tailwindBuild") {
+    commandLine("npm", "run", "build:css")
+}
+
+tasks.bootJar {
+    dependsOn("tailwindBuild")
+}
