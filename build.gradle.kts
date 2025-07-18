@@ -45,9 +45,17 @@ tasks.withType<Test> {
 }
 
 tasks.register<Exec>("tailwindBuild") {
-    commandLine("npm", "run", "build:css")
+    val isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
+    
+    if (isWindows) {
+        commandLine("cmd", "/c", "npm", "run", "build:css")
+    } else {
+        commandLine("sh", "-c", "npm run build:css")
+    }
+    
+    workingDir = projectDir
 }
 
-tasks.bootJar {
+tasks.named("processResources") {
     dependsOn("tailwindBuild")
 }

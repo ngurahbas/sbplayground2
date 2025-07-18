@@ -13,6 +13,7 @@
   "type": "commonjs",
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.11",
+    "daisyui": "^5.0.46",
     "tailwindcss": "^4.1.11"
   }
 }

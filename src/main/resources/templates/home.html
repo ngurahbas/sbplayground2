@@ -1,23 +1,39 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="h-full bg-gray-100">
+<html xmlns:th="http://www.thymeleaf.org" class="h-full bg-base-100" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${title}">SB Playground</title>
     <link href="/css/output.css" rel="stylesheet">
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('theme')) {
+            document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
+        }
+    </script>
 </head>
 <body class="h-full">
     <div class="min-h-screen flex items-center justify-center p-4">
-        <div class="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
-            <div class="bg-indigo-600 p-6">
-                <h1 class="text-2xl font-bold text-white" th:text="${title}">Welcome</h1>
+        <div class="w-full max-w-md bg-base-100 rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-primary p-6">
+                <h1 class="text-2xl font-bold text-primary-content" th:text="${title}">Welcome</h1>
             </div>
             <div class="p-6">
-                <p class="text-gray-700 text-lg mb-4" th:text="${message}">Default message</p>
-                <div class="mt-4 p-3 bg-gray-50 rounded">
-                    <p class="text-sm text-gray-600">
-                        Current time: 
-                        <span class="font-medium" 
+                <div class="dropdown">
+                    <div tabindex="0" role="button" class="btn m-1">
+                      Theme
+                      <svg width="12px" height="12px" class="h-2 w-2 fill-current opacity-60 inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048"><path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path></svg>
+                    </div>
+                    <ul tabindex="0" class="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52">
+                      <li><input type="radio" name="theme-dropdown" class="theme-controller btn btn-sm btn-block btn-ghost justify-start" aria-label="Light" value="light"/></li>
+                      <li><input type="radio" name="theme-dropdown" class="theme-controller btn btn-sm btn-block btn-ghost justify-start" aria-label="Dark" value="dark"/></li>
+                    </ul>
+                  </div>
+                <p class="text-base-content text-lg mb-4" th:text="${message}">Default message</p>
+                <div class="mt-4 p-3 bg-base-200 rounded">
+                    <p class="text-sm text-base-content">
+                        Current time:
+                        <span class="font-medium"
                               th:text="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd HH:mm:ss')}">
                             time
                         </span>
@@ -26,5 +42,27 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeInputs = document.querySelectorAll('input[name="theme-dropdown"]');
+            const html = document.documentElement;
+
+            // Set the active radio button on page load
+            const currentTheme = html.getAttribute('data-theme') || 'light';
+            const activeRadio = document.querySelector(`input[name="theme-dropdown"][value="${currentTheme}"]`);
+            if (activeRadio) {
+                activeRadio.checked = true;
+            }
+
+            // Add event listeners to theme inputs
+            themeInputs.forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const theme = e.target.value;
+                    localStorage.setItem('theme', theme);
+                    html.setAttribute('data-theme', theme);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
