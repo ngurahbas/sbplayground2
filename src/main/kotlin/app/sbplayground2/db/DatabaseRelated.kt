@@ -10,8 +10,23 @@ import org.springframework.data.convert.ReadingConverter
 import org.springframework.data.convert.WritingConverter
 import org.springframework.data.jdbc.core.mapping.JdbcValue
 import org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration
+import org.springframework.data.repository.NoRepositoryBean
+import org.springframework.data.repository.Repository
 import java.sql.JDBCType
 
+@NoRepositoryBean
+interface ReadRepository<T , ID> : Repository<T, ID> {
+    fun findDataById(id: ID): T?
+
+    fun count(): Long
+}
+
+@NoRepositoryBean
+interface WriteRepository<T , ID> : Repository<T, ID> {
+    fun deleteById(id: ID)
+
+    fun deleteAll()
+}
 
 @WritingConverter
 class JsonNodeToJsonb(

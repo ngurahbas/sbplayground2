@@ -1,7 +1,7 @@
 package app.sbplayground2.domain.user
 
-import app.sbplayground2.common.ReadRepository
-import app.sbplayground2.common.WriteRepository
+import app.sbplayground2.db.ReadRepository
+import app.sbplayground2.db.WriteRepository
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
@@ -9,6 +9,7 @@ import org.springframework.data.relational.core.mapping.Table
 
 @Table("user_auth")
 class UserAuth(
+
     @Id
     val id: Long? = null,
 
@@ -26,6 +27,7 @@ class UserAuth(
 )
 
 interface UserAuthRepository : ReadRepository<UserAuth, Long>, WriteRepository<UserAuth, Long> {
+
     @Query(
         """
         SELECT *
