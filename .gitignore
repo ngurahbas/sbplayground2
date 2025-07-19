@@ -45,3 +45,5 @@ package-lock.json
 
 # Tailwind CSS
 src/main/resources/static/css/output.css
+
+bun.lockb
