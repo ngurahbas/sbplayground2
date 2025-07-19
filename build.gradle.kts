@@ -45,14 +45,7 @@ tasks.withType<Test> {
 }
 
 tasks.register<Exec>("tailwindBuild") {
-    val isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
-    
-    if (isWindows) {
-        commandLine("cmd", "/c", "npm", "run", "build:css")
-    } else {
-        commandLine("sh", "-c", "npm run build:css")
-    }
-    
+    commandLine("bun", "run", "build:css")
     workingDir = projectDir
 }
 
