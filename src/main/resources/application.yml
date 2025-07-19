@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: sbplayground2
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  
+  # Flyway configuration
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+  
+  # OAuth2 configuration
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:your-google-client-id}
+            client-secret: ${GOOGLE_CLIENT_SECRET:your-google-client-secret}
+            scope: email,profile
