@@ -4,7 +4,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.core.user.OAuth2User
 
 data class AuthenticatedUser(
-    val name: String,
+    private val name: String,
     val idType: IdType,
     val idValue: String,
     val idSource: IdSource,
