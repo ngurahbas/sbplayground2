@@ -1,11 +1,34 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="h-full bg-base-100" data-theme="light">
+<html xmlns:th="http://www.thymeleaf.org" class="h-full bg-base-100" data-theme="light" x-data="{ theme: 'light' }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${title}">SB Playground</title>
     <link href="/css/output.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
-<body>
+<body class="h-full">
+
+<div class="navbar bg-neutral text-neutral-content">
+    <div class="flex-1">
+        <a class="btn btn-ghost text-xl">Dashboard</a>
+    </div>
+    <div class="flex-none">
+        <ul class="menu menu-horizontal px-1">
+            <li>
+                <details>
+                    <summary>
+                        Theme
+                    </summary>
+                    <ul class="p-2 bg-neutral rounded-t-none">
+                        <li><a @click.prevent="document.documentElement.setAttribute('data-theme', 'light')">Light</a></li>
+                        <li><a @click.prevent="document.documentElement.setAttribute('data-theme', 'dark')">Dark</a></li>
+                    </ul>
+                </details>
+            </li>
+        </ul>
+    </div>
+</div>
+
 </body>
 </html>
