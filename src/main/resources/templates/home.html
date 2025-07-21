@@ -10,22 +10,24 @@
 <body class="h-full">
 
 <div class="navbar bg-neutral text-neutral-content">
-    <div class="flex-1">
-        <a class="btn btn-ghost text-xl">Dashboard</a>
-    </div>
     <div class="flex-none">
-        <label class="swap swap-rotate btn btn-ghost btn-circle tooltip tooltip-bottom" data-tip="Toggle Theme"
+        <label class="swap swap-rotate btn btn-ghost btn-circle tooltip tooltip-left" data-tip="Toggle Theme"
                x-data="{ theme: document.documentElement.getAttribute('data-theme') || 'light' }"
                :class="{ 'swap-active': theme === 'dark' }"
                @click="theme = (theme === 'light' ? 'dark' : 'light'); document.documentElement.setAttribute('data-theme', theme)">
 
-            <!-- moon icon -->
-            <span class="swap-on text-2xl">🌚</span>
+            <span class="swap-on text-2xl grayscale">🌚</span>
 
-            <!-- sun icon -->
-            <span class="swap-off text-2xl">🌞</span>
+            <span class="swap-off text-2xl grayscale">🌞</span>
 
         </label>
+    </div>
+    <div class="flex-1">
+        <a class="btn btn-ghost text-xl">Dashboard</a>
+    </div>
+    <div class="flex-none">
+        <span th:if="${authenticated}" th:text="${username}"></span>
+        <a th:if="not ${authenticated}" href="/oauth2/authorization/google" class="btn btn-ghost">Login with Google</a>
     </div>
 </div>
 

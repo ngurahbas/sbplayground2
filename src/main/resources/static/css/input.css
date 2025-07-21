@@ -1,2 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+.grayscale {
+  filter: grayscale(100%);
+}
